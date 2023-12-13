@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,8 @@ public class QuizActivity extends AppCompatActivity {
      private Timer quizTimer;
      private int timeInMins = 1;
      private int seconds = 0;
-     private final List<QuestionsList>  questionsLists = new ArrayList<>();
+     private List<QuestionsList>  questionsLists ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +45,39 @@ public class QuizActivity extends AppCompatActivity {
 
         final String getSelectedTopicName = getIntent().getStringExtra("selectedTopic");
         selectedTopicName.setText(getSelectedTopicName);
+        questionsLists = QuestionsBank.getQuestions(getSelectedTopicName);
 
         startTime(timer);
+        option1.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 1
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        option2.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 2
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        option3.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 3
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        option4.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 4
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        nextBtn.setOnClickListener(new View.OnClickListener() {    // set nút Next
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 // Set thời gian đếm ngược cho người dùng thực hiện bài trắc nghiệm
@@ -120,8 +153,5 @@ public class QuizActivity extends AppCompatActivity {
         return correctAnswers;
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
+
 }
