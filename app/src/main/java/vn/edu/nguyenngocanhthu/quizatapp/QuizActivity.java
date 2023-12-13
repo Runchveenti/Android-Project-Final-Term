@@ -24,6 +24,7 @@ public class QuizActivity extends AppCompatActivity {
      private int timeInMins = 1;
      private int seconds = 0;
      private List<QuestionsList>  questionsLists ;
+     private int currentQuestionPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,9 @@ public class QuizActivity extends AppCompatActivity {
         questionsLists = QuestionsBank.getQuestions(getSelectedTopicName);
 
         startTime(timer);
+        questions.setText(currentQuestionPosition+1);
+        question.setText(currentQuestionPosition);
+
         option1.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 1
             @Override
             public void onClick(View v) {
@@ -72,7 +76,7 @@ public class QuizActivity extends AppCompatActivity {
 
             }
         });
-        nextBtn.setOnClickListener(new View.OnClickListener() {    // set nút Next
+        nextBtn.setOnClickListener(new View.OnClickListener() {    // set event cho nút Next
             @Override
             public void onClick(View v) {
 
@@ -129,10 +133,10 @@ public class QuizActivity extends AppCompatActivity {
     private int getCorrectAnswers(){
         int correctAnswers = 0;
         for (int i=0; i<questionsLists.size(); i++ ){
-            final String getUserSlectedAnswer = questionsLists.get(i).getUserSelectedAnswer();
+            final String getUserSelectedAnswer = questionsLists.get(i).getUserSelectedAnswer();
             final String getAnswer = questionsLists.get(i).getAnswer();
 
-            if (getUserSlectedAnswer.equals(getAnswer)){
+            if (getUserSelectedAnswer.equals(getAnswer)){
                 correctAnswers++;
             }
         }
@@ -143,10 +147,10 @@ public class QuizActivity extends AppCompatActivity {
     private int getInCorrectAnswers(){
         int correctAnswers = 0;
         for (int i=0; i<questionsLists.size(); i++ ){
-            final String getUserSlectedAnswer = questionsLists.get(i).getUserSelectedAnswer();
+            final String getUserSelectedAnswer = questionsLists.get(i).getUserSelectedAnswer();
             final String getAnswer = questionsLists.get(i).getAnswer();
 
-            if (!getUserSlectedAnswer.equals(getAnswer)){
+            if (!getUserSelectedAnswer.equals(getAnswer)){
                 correctAnswers++;
             }
         }
