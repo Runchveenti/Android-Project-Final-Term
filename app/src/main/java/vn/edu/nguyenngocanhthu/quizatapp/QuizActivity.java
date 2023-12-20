@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ public class QuizActivity extends AppCompatActivity {
      private int seconds = 0;
      private List<QuestionsList>  questionsLists ;
      private int currentQuestionPosition = 0;
+     private String  selectedOptionByUser = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,44 +46,128 @@ public class QuizActivity extends AppCompatActivity {
         option4 = findViewById(R.id.option4);
         nextBtn = findViewById(R.id.nextBtn);
 
+        // Set cho phần câu hỏi
         final String getSelectedTopicName = getIntent().getStringExtra("selectedTopic");
         selectedTopicName.setText(getSelectedTopicName);
         questionsLists = QuestionsBank.getQuestions(getSelectedTopicName);
 
         startTime(timer);
-        questions.setText(currentQuestionPosition+1);
-        question.setText(currentQuestionPosition);
+        questions.setText((currentQuestionPosition+1) +"/"+ questionsLists.size());
+        question.setText(questionsLists.get(0).getQuestion());
 
+        // Set cho phần option 1,2,3,4
+        option1.setText(questionsLists.get(0).getOption1());
+        option2.setText(questionsLists.get(0).getOption2());
+        option3.setText(questionsLists.get(0).getOption3());
+        option4.setText(questionsLists.get(0).getOption4());
         option1.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 1
             @Override
             public void onClick(View v) {
+                if (selectedOptionByUser.isEmpty()){
+                    selectedOptionByUser = option1.getText().toString();
+                    option1.setBackgroundResource(R.drawable.round_back_red_option);
+                    option1.setTextColor(Color.WHITE);
 
+                    //  Hiện đáp án sau khi người dùng chọn câu trả lời
+                    revealAnswer();
+                    questionsLists.get(currentQuestionPosition).setUserSelectedAnswer(selectedOptionByUser);
+                }
             }
         });
         option2.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 2
             @Override
             public void onClick(View v) {
+                if (selectedOptionByUser.isEmpty()){
+                    selectedOptionByUser = option2.getText().toString();
+                    option2.setBackgroundResource(R.drawable.round_back_red_option);
+                    option2.setTextColor(Color.WHITE);
 
+                    //  Hiện đáp án sau khi người dùng chọn câu trả lời
+                    revealAnswer();
+                    questionsLists.get(currentQuestionPosition).setUserSelectedAnswer(selectedOptionByUser);
+                }
             }
         });
         option3.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 3
             @Override
             public void onClick(View v) {
+                if (selectedOptionByUser.isEmpty()){
+                    selectedOptionByUser = option3.getText().toString();
+                    option3.setBackgroundResource(R.drawable.round_back_red_option);
+                    option3.setTextColor(Color.WHITE);
 
+                    //  Hiện đáp án sau khi người dùng chọn câu trả lời
+                    revealAnswer();
+                    questionsLists.get(currentQuestionPosition).setUserSelectedAnswer(selectedOptionByUser);
+                }
             }
         });
         option4.setOnClickListener(new View.OnClickListener() {     // set chọn đáp án 4
             @Override
             public void onClick(View v) {
+                if (selectedOptionByUser.isEmpty()){
+                    selectedOptionByUser = option4.getText().toString();
+                    option4.setBackgroundResource(R.drawable.round_back_red_option);
+                    option4.setTextColor(Color.WHITE);
 
+                    //  Hiện đáp án sau khi người dùng chọn câu trả lời
+                    revealAnswer();
+                    questionsLists.get(currentQuestionPosition).setUserSelectedAnswer(selectedOptionByUser);
+                }
             }
         });
         nextBtn.setOnClickListener(new View.OnClickListener() {    // set event cho nút Next
             @Override
             public void onClick(View v) {
-
+                if (selectedOptionByUser.isEmpty()){
+                    Toast.makeText(QuizActivity.this,"Please select an option",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    changeNextQuestion();
+                }
             }
         });
+    }
+
+    //   Đổi câu hỏi tiếp theo và khi hết câu hỏi thì sẽ hiện submit
+    private void changeNextQuestion(){
+        currentQuestionPosition++;
+        if ((currentQuestionPosition+1) == questionsLists.size()){      //   set submit
+            nextBtn.setText("Submit Quiz");
+        }
+        if (currentQuestionPosition < questionsLists.size()){
+            selectedOptionByUser = "";
+
+            option1.setBackgroundResource(R.drawable.round_back_white_stroke);   // option1
+            option1.setTextColor(Color.parseColor("#1F6BB8"));
+
+            option2.setBackgroundResource(R.drawable.round_back_white_stroke);   // option2
+            option2.setTextColor(Color.parseColor("#1F6BB8"));
+
+            option3.setBackgroundResource(R.drawable.round_back_white_stroke);   // option3
+            option3.setTextColor(Color.parseColor("#1F6BB8"));
+
+            option4.setBackgroundResource(R.drawable.round_back_white_stroke);   // option4
+            option4.setTextColor(Color.parseColor("#1F6BB8"));
+
+            questions.setText((currentQuestionPosition+1) +"/"+ questionsLists.size());
+            question.setText(questionsLists.get(0).getQuestion());
+
+            // Set cho phần option 1,2,3,4
+            option1.setText(questionsLists.get(currentQuestionPosition).getOption1());
+            option2.setText(questionsLists.get(currentQuestionPosition).getOption2());
+            option3.setText(questionsLists.get(currentQuestionPosition).getOption3());
+            option4.setText(questionsLists.get(currentQuestionPosition).getOption4());
+
+        }
+        else {
+            Intent intent = new Intent(QuizActivity.this, QuizResults.class);
+            intent.putExtra("correct", getCorrectAnswers());
+            intent.putExtra("incorrect", getInCorrectAnswers());
+            startActivity(intent);
+
+            finish();
+        }
     }
 
 // Set thời gian đếm ngược cho người dùng thực hiện bài trắc nghiệm
@@ -157,5 +243,28 @@ public class QuizActivity extends AppCompatActivity {
         return correctAnswers;
     }
 
+    //====== Set Back button
 
+
+    // Hiện câu trả lời đúng, sai
+    private void revealAnswer(){
+        final String getAnswer = questionsLists.get(currentQuestionPosition).getAnswer();
+        // Option1
+        if (option1.getText().toString().equals(getAnswer)){
+            option1.setBackgroundResource(R.drawable.round_back_green);
+            option1.setTextColor(Color.WHITE);
+        }
+        else if (option2.getText().toString().equals(getAnswer)) {        // Option2
+            option2.setBackgroundResource(R.drawable.round_back_green);
+            option2.setTextColor(Color.WHITE);
+        }
+        else if (option3.getText().toString().equals(getAnswer)) {        // Option3
+            option3.setBackgroundResource(R.drawable.round_back_green);
+            option3.setTextColor(Color.WHITE);
+        }
+        else if (option4.getText().toString().equals(getAnswer)) {        // Option4
+            option4.setBackgroundResource(R.drawable.round_back_green);
+            option4.setTextColor(Color.WHITE);
+        }
+    }
 }
