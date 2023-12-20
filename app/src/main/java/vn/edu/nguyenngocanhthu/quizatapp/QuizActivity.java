@@ -129,7 +129,7 @@ public class QuizActivity extends AppCompatActivity {
         });
     }
 
-    //   Đổi câu hỏi tiếp theo và khi hết câu hỏi thì sẽ hiện submit
+       // Đổi câu hỏi tiếp theo và khi hết câu hỏi thì sẽ hiện submit
     private void changeNextQuestion(){
         currentQuestionPosition++;
         if ((currentQuestionPosition+1) == questionsLists.size()){      //   set submit
