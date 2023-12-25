@@ -127,12 +127,18 @@ public class QuizActivity extends AppCompatActivity {
                 }
             }
         });
+        backBtn.setOnClickListener(new View.OnClickListener() {    // set event cho nút Back
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
        // Đổi câu hỏi tiếp theo và khi hết câu hỏi thì sẽ hiện submit
     private void changeNextQuestion(){
         currentQuestionPosition++;
-        if ((currentQuestionPosition+1) == questionsLists.size()){      //   set submit
+        if ((currentQuestionPosition+1) == questionsLists.size()){      //   set submit khi người dùng tới câu hỏi cuối cùng
             nextBtn.setText("Submit Quiz");
         }
         if (currentQuestionPosition < questionsLists.size()){
@@ -150,8 +156,9 @@ public class QuizActivity extends AppCompatActivity {
             option4.setBackgroundResource(R.drawable.round_back_white_stroke);   // option4
             option4.setTextColor(Color.parseColor("#1F6BB8"));
 
+            // Chuyển sang câu hỏi tiếp theo khi người dùng bấm nút Next
             questions.setText((currentQuestionPosition+1) +"/"+ questionsLists.size());
-            question.setText(questionsLists.get(0).getQuestion());
+            question.setText(questionsLists.get(currentQuestionPosition).getQuestion());
 
             // Set cho phần option 1,2,3,4
             option1.setText(questionsLists.get(currentQuestionPosition).getOption1());
