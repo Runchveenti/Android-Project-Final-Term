@@ -127,9 +127,13 @@ public class QuizActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //====== Set Back button
         backBtn.setOnClickListener(new View.OnClickListener() {    // set event cho nút Back
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(QuizActivity.this, MainActivity.class);  // Quay trở lại trang chính
+                startActivity(intent);
                 finish();
             }
         });
@@ -183,11 +187,7 @@ public class QuizActivity extends AppCompatActivity {
         quizTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (seconds == 0){
-                    timeInMins--;
-                    seconds = 59;
-                }
-                else if (seconds == 0 && timeInMins == 0){
+                if (timeInMins == 0 && seconds == 0) {
                     quizTimer.purge();  // xoá dữ liệu khi hết giờ
                     quizTimer.cancel();
 
@@ -198,6 +198,9 @@ public class QuizActivity extends AppCompatActivity {
                     intent.putExtra("Sorry, That's Not A Correct Answer!", getInCorrectAnswers());
                     startActivity(intent);
                     finish();
+                } else if (seconds == 0) {
+                    timeInMins--;
+                    seconds = 59;
                 }
                 else {
                     seconds--;
@@ -249,8 +252,6 @@ public class QuizActivity extends AppCompatActivity {
         }
         return correctAnswers;
     }
-
-    //====== Set Back button
 
 
     // Hiện câu trả lời đúng, sai
